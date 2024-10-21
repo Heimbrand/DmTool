@@ -1,22 +1,17 @@
 ﻿using DmTool.Efc.Sql.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+
 
 namespace DmTool.Efc.Sql;
 
-public class DmDbContext(DbContextOptions<DmDbContext> options, IConfiguration configuration)
-    : DbContext(options)
+public class DmDbContext : IdentityDbContext<User>
 {
-    private readonly IConfiguration _configuration = configuration;
-
-    public DbSet<Player> Players { get; set; }
-    public DbSet<Item> Items { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public DmDbContext(DbContextOptions<DmDbContext> options) : base(options)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
-        }
     }
+
+    public DbSet<Character> Characters { get; set; }
+    public DbSet<Item> Items { get; set; }
+    public override DbSet<User> Users { get; set; }
 }

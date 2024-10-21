@@ -1,15 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using DmTool.Shared.Interfaces;
+﻿namespace DmTool.Efc.Sql.Dtos;
 
-namespace DmTool.Efc.Sql.Entities;
-
-public class BaseEntity : IEntity<int>
+public class ItemDto
 {
-    [Key]
     public int Id { get; set; }
     public string Name { get; set; } = default!;
     public DateTime Created { get; set; } = DateTime.UtcNow;
     public DateTime? Modified { get; set; }
     public string? Notes { get; set; }
     public string? Portrait { get; set; }
+
+    public List<string>? ItemOutcomes { get; set; }
+    public int CharacterId { get; set; }
 }

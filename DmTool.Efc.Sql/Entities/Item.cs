@@ -1,6 +1,9 @@
-﻿namespace DmTool.Efc.Sql.Entities;
+﻿using System.Runtime.CompilerServices;
+
+namespace DmTool.Efc.Sql.Entities;
 
 public class Item : BaseEntity
 {
-    public string Severity { get; set; } = default!;
+    public ICollection<string>? ItemOutcomes { get; set; }
+    public int CharacterId { get; set; }
 }

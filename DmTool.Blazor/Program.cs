@@ -1,6 +1,8 @@
 using DmTool.Blazor.Components;
 using DmTool.Blazor.Components.Account;
-using DmTool.Blazor.Data;
+
+using DmTool.Efc.Sql;
+using DmTool.Efc.Sql.Entities;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,16 +29,16 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<DmDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
+builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<DmDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddSingleton<IEmailSender<User>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();
 

@@ -17,6 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{C6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DmTool.Blazor", "DmTool.Blazor\DmTool.Blazor.csproj", "{E1E21850-F10E-446F-A67F-58F0560BDB18}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{54D460D2-841A-48D5-B84B-E17A7C814933}"
+	ProjectSection(SolutionItems) = preProject
+		Todo.md = Todo.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
