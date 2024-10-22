@@ -1,4 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using DmTool.Efc.Sql
+@using DmTool.Efc.Sql.Entities
+@using Microsoft.IdentityModel.Tokens
+@using MudBlazor
+@inherits Microsoft.AspNetCore.Components.LayoutComponentBase
 
 <MudThemingProvider />
 <MudPopoverProvider />
@@ -8,8 +12,8 @@
 <MudLayout>
     <MudAppBar Elevation="1">
 		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
-        <MudSpacer />
+        <MudText Typo="Typo.h5" Class="ml-3">DmTool</MudText>
+        <MudSpacer/>
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
@@ -18,9 +22,15 @@
     <MudMainContent Class="mt-16 pa-4">
         @Body
     </MudMainContent>
+    <MudButton>sdfdsf</MudButton>
 </MudLayout>
 
 @code {
+
+   
+
+
+
     private bool _drawerOpen = true;
 
     private void DrawerToggle()

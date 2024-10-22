@@ -4,6 +4,6 @@ namespace DmTool.Efc.Sql.Entities;
 
 public class Item : BaseEntity
 {
-    public ICollection<string>? ItemOutcomes { get; set; }
+    public List<string> Content { get; set; }
     public int CharacterId { get; set; }
 }

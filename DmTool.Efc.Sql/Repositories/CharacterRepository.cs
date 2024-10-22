@@ -16,34 +16,51 @@ public class CharacterRepository(DmDbContext context) : ICharacterRepository
 
        return allCharacters;
     }
-
     public async Task<Character> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
-    }
+       var characterById = await context.Characters.FindAsync(id);
 
+       if (characterById is null)
+              throw new Exception("Character not found.");
+
+       return characterById;
+    }
     public async Task<Character> GetByNameAsync(string name)
     {
-        throw new NotImplementedException();
-    }
+        var characterByName = await context.Characters.FirstOrDefaultAsync(c => c.Name == name);
 
-    public async Task<Character> AddAsync(Character entity)
+        if (characterByName is null)
+            throw new Exception("Character not found.");
+
+        return characterByName;
+    }
+    public async Task AddAsync(Character entity)
     {
-        throw new NotImplementedException();
+        var character = await context.Characters.AddAsync(entity);
+        await context.SaveChangesAsync();
     }
-
-    public async Task<Character> UpdateAsync(Character entity)
+    public async Task UpdateAsync(Character entity)
     {
-        throw new NotImplementedException();
+        var character = context.Characters.Update(entity);
+        await context.SaveChangesAsync();
     }
-
-    public async Task<Character> DeleteAsync(int id)
+    public async Task DeleteAsync(int id)
     {
-        throw new NotImplementedException();
-    }
+        var characterById = await context.Characters.FindAsync(id);
 
+        if (characterById is null)
+            throw new Exception("Character not found.");
+
+        context.Characters.Remove(characterById);
+        await context.SaveChangesAsync();
+    }
     public async Task<IEnumerable<Character>> GetAllByLevelAsync(int level)
     {
-        throw new NotImplementedException();
+        var charactersByLevel = await context.Characters.Where(c => c.Level == level).ToListAsync();
+
+        if (charactersByLevel is null || !charactersByLevel.Any())
+            throw new Exception("No characters found.");
+
+        return charactersByLevel;
     }
 }

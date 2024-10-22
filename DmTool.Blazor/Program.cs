@@ -3,6 +3,7 @@ using DmTool.Blazor.Components.Account;
 
 using DmTool.Efc.Sql;
 using DmTool.Efc.Sql.Entities;
+using DmTool.Efc.Sql.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,7 @@ builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirme
     .AddEntityFrameworkStores<DmDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
-
+builder.Services.AddScoped<CharacterRepository>();
 builder.Services.AddSingleton<IEmailSender<User>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();

@@ -1,0 +1,46 @@
+﻿@page "/characters"
+@inject CharacterRepository context
+
+
+
+@using DmTool.Efc.Sql
+@using DmTool.Efc.Sql.Entities
+@using DmTool.Efc.Sql.Repositories
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Characters</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Characters</MudText>
+
+
+
+@foreach (var character in AllChracters)
+{
+    <MudCard Style="width: 350; height: 350; box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);">
+        <MudCardContent>
+            <MudImage Src="@character.Portrait" Alt="Character Portrait" Height="200" Width="200" />
+            <MudText>Name: @character.Name</MudText>
+            <MudText>Level: @character.Level</MudText>
+            <MudText>Experience; @character.Experience</MudText>
+            <MudText>Notes: @character.Notes</MudText>
+            <MudButton>Edit</MudButton>
+        </MudCardContent>
+        </MudCard>
+}
+
+
+
+
+@code
+{
+    private List<Character> AllChracters = new();
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var allCharacters = await context.GetAllAsync();
+        AllChracters.AddRange(allCharacters);
+    }
+}
