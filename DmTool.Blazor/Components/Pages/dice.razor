@@ -22,10 +22,32 @@
 {
     <MudCard>
         <MudCardContent>
-            <MudText>@rollResult</MudText>
+            <MudText>Current roll: @rollResult</MudText>
         </MudCardContent>
-        </MudCard>
+    </MudCard>
 }
+<MudCard>
+    <MudCardContent>
+
+        @if (results.Count > 0)
+        {
+            <MudText>Roll history</MudText>
+            @foreach (var result in results)
+            {
+                <MudText>@result.Key</MudText>
+                @foreach (var roll in result.Value.AsEnumerable().Reverse())
+                {
+                    <MudText>Previous rolls: @roll</MudText>
+                }
+            }
+        }
+        else
+        {
+            <MudText>Roll history is empty</MudText>
+        }
+
+    </MudCardContent>
+</MudCard>
 
 
 
@@ -34,6 +56,7 @@
 @code {
 
     private int? rollResult;
+    private Dictionary<string, List<int>> results = new();
 
     private void RollD20() => rollResult = D20Roll();
     private void RollD12() => rollResult = D12Roll();
@@ -48,6 +71,8 @@
     {
         Random rnd = new Random();
         int roll = rnd.Next(1, 21);
+        string key = "D20";
+        AddRollToResults(key, roll);
 
         return roll;
     }
@@ -55,46 +80,62 @@
     {
         Random rnd = new Random();
         int roll = rnd.Next(1, 13);
-
+        string key = "D12";
+        AddRollToResults(key, roll);
         return roll;
     }
     private int D10Roll()
     {
         Random rnd = new Random();
         int roll = rnd.Next(1, 11);
-
+        string key = "D10";
+        AddRollToResults(key, roll);
         return roll;
     }
     private int D8Roll()
     {
         Random rnd = new Random();
         int roll = rnd.Next(1, 9);
-
+        string key = "D8";
+        AddRollToResults(key, roll);
         return roll;
     }
     private int D6Roll()
     {
         Random rnd = new Random();
         int roll = rnd.Next(1, 7);
-
+        string key = "D6";
+        AddRollToResults(key, roll);
         return roll;
     }
     private int D4Roll()
     {
         Random rnd = new Random();
         int roll = rnd.Next(1, 5);
-
+        string key = "D4";
+        AddRollToResults(key, roll);
         return roll;
     }
     private int D100Roll()
     {
         Random rnd = new Random();
         int roll = rnd.Next(1, 101);
-
+        string key = "D100";
+        AddRollToResults(key, roll);
         return roll;
     }
     private int ClearResult()
     {
+        results.Clear();
         return 0;
+    }
+
+    private void AddRollToResults(string key, int roll)
+    {
+        if (!results.ContainsKey(key))
+        {
+            results[key] = new List<int>();
+        }
+        results[key].Add(roll);
     }
 }

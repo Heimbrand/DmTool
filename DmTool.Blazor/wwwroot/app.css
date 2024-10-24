@@ -21,6 +21,6 @@
 
 .mud-layout {
     background-image: url('/Parchment.png');
-    background-size: cover; /* Optional: to cover the entire area */
-    background-repeat: no-repeat; /* Optional: to prevent repeating */
+    background-size: cover; 
+    background-repeat: no-repeat; 
 }
