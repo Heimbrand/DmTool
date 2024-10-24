@@ -23,4 +23,16 @@
     <ProjectReference Include="..\DmTool.Efc.Sql\DmTool.Efc.Sql.csproj" />
   </ItemGroup>
 
+  
+  
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\dice.razor" />
+  </ItemGroup>
+
+  
+  
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\dice.razor" />
+  </ItemGroup>
+
 </Project>

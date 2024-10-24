@@ -1,0 +1,100 @@
+﻿@page "/dice"
+<h3>Dices</h3>
+
+
+
+<div>
+    <MudAlert Severity="Severity.Success">
+
+        <MudButton OnClick="RollD20" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D20</MudButton>
+        <MudButton OnClick="RollD12" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D12</MudButton>
+        <MudButton OnClick="RollD10" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D10</MudButton>
+        <MudButton OnClick="RollD8" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D8</MudButton>
+        <MudButton OnClick="RollD6" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D6</MudButton>
+        <MudButton OnClick="RollD4" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D4</MudButton>
+        <MudButton OnClick="RollD100" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D100</MudButton>
+        <MudButton OnClick="ClearResults" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">Clear results</MudButton>
+
+    </MudAlert>
+</div>
+
+@if (rollResult.HasValue)
+{
+    <MudCard>
+        <MudCardContent>
+            <MudText>@rollResult</MudText>
+        </MudCardContent>
+        </MudCard>
+}
+
+
+
+
+
+@code {
+
+    private int? rollResult;
+
+    private void RollD20() => rollResult = D20Roll();
+    private void RollD12() => rollResult = D12Roll();
+    private void RollD10() => rollResult = D10Roll();
+    private void RollD8() => rollResult = D8Roll();
+    private void RollD6() => rollResult = D6Roll();
+    private void RollD4() => rollResult = D4Roll();
+    private void RollD100() => rollResult = D100Roll();
+    private void ClearResults() => rollResult = ClearResult();
+
+    private int D20Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 21);
+
+        return roll;
+    }
+    private int D12Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 13);
+
+        return roll;
+    }
+    private int D10Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 11);
+
+        return roll;
+    }
+    private int D8Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 9);
+
+        return roll;
+    }
+    private int D6Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 7);
+
+        return roll;
+    }
+    private int D4Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 5);
+
+        return roll;
+    }
+    private int D100Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 101);
+
+        return roll;
+    }
+    private int ClearResult()
+    {
+        return 0;
+    }
+}

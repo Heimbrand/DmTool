@@ -1,8 +1,6 @@
 ﻿@page "/characters"
 @inject CharacterRepository context
 
-
-
 @using DmTool.Efc.Sql
 @using DmTool.Efc.Sql.Entities
 @using DmTool.Efc.Sql.Repositories
@@ -12,31 +10,100 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">Characters</MudText>
 
-
-
 @foreach (var character in AllChracters)
 {
-    <MudCard Style="width: 350; height: 350; box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);">
-        <MudCardContent>
-            <MudImage Src="@character.Portrait" Alt="Character Portrait" Height="200" Width="200" />
-            <MudText>Name: @character.Name</MudText>
-            <MudText>Level: @character.Level</MudText>
-            <MudText>Experience; @character.Experience</MudText>
-            <MudText>Notes: @character.Notes</MudText>
-            <MudButton>Edit</MudButton>
-        </MudCardContent>
-        </MudCard>
+    <MudGrid Justify="Justify.SpaceBetween">
+        <MudItem>
+            <MudCard Style="width: 500px; height: 450px; background-image: url('/Images/Parchment.png'); background-repeat: no-repeat; margin: 10px">
+                <MudCardContent>
+                    <MudImage Src="@character.Portrait" Alt="Character Portrait" Height="200" Width="150" />
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Name: @character.Name</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Level: @character.Level</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Experience: @character.Experience</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Notes: @character.Notes</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem>
+            <EditForm Model="@character" OnValidSubmit="() => OnValidSubmit(character)">
+                <DataAnnotationsValidator />
+                <MudGrid>
+                    <MudItem xs="12" sm="7">
+                        <MudCard>
+                            <MudCardContent>
+                                <MudTextField Label="Name"
+                                              @bind-Value="character.Name" For="@(() => character.Name)" />
+                                <MudTextField Label="Level" Class="mt-3"
+                                              @bind-Value="character.Level" For="@(() => character.Level)" />
+                                <MudTextField Label="Experience" Class="mt-3"
+                                              @bind-Value="character.Experience" For="@(() => character.Experience)" />
+                                <MudTextField Label="Notes" Class="mt-3"
+                                              @bind-Value="character.Notes" For="@(() => character.Notes)" />
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Edit</MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" sm="5">
+                        <MudPaper Class="pa-4 mud-height-full">
+                            <MudText Typo="Typo.subtitle2">Validation Summary</MudText>
+                            @if (success)
+                            {
+                                <MudText Color="Color.Success">Success</MudText>
+                            }
+                            else
+                            {
+                                <MudText Color="@Color.Error">
+                                    <ValidationSummary />
+                                </MudText>
+                            }
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body2" Align="Align.Center">
+                            Validation Summary kommer berätta om det gick bra eller åt skogen=)
+                        </MudText>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        </MudItem>
+        <MudItem>
+            <MudCard Style="width: 500px; height: 450px; background-image: url('/Images/Parchment.png'); background-repeat: no-repeat; margin: 10px">
+                <MudCardContent>
+                 @if (character.Items is null || !character.Items.Any())
+                 {
+                     <MudText Typo="Typo.h5" Class="ml-3 black-text">@character.Name has no items</MudText>
+                 }
+                 else
+                 {
+                     foreach (var item in character.Items)
+                     {
+                         <MudText Typo="Typo.h5" Class="ml-3 black-text">Name: @character.Items</MudText>
+                     }   
+                 }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 }
-
-
-
 
 @code
 {
+    bool success;
     private List<Character> AllChracters = new();
 
+    private async Task OnValidSubmit(Character character)
+    {
+        success = true;
+        await UpdateCharacter(character);
+    }
 
-
+    private async Task UpdateCharacter(Character character)
+    {
+        await context.UpdateAsync(character);
+        StateHasChanged();
+    }
 
     protected override async Task OnInitializedAsync()
     {

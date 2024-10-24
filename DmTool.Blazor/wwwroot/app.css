@@ -18,3 +18,9 @@
     --bs-nav-link-color: var(--mud-palette-primary) !important;
     --bs-nav-link-hover-color: var(--mud-palette-primary-darken) !important;
 }
+
+.mud-layout {
+    background-image: url('/Parchment.png');
+    background-size: cover; /* Optional: to cover the entire area */
+    background-repeat: no-repeat; /* Optional: to prevent repeating */
+}
