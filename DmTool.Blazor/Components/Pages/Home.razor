@@ -1,42 +1,97 @@
 ﻿@page "/"
+@using DmTool.Efc.Sql.Entities
+@using DmTool.Efc.Sql.Repositories
+@inject CharacterRepository context
 
 <PageTitle>Home</PageTitle>
 
-<MudAlert Severity="Severity.Success">
-    MudBlazor templates
-    <MudLink Href="https://mudblazor.com" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        <b>www.mudblazor.com</b>
-    </MudLink>
-</MudAlert>
 
-<MudAlert Severity="Severity.Success">
-    Efraim Malphael Ignatius Lucifron
-    <MudLink Href="https://www.dndbeyond.com/characters/133616351" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        <b>Dnd Beyond Sheet </b>
-    </MudLink>
-</MudAlert>
-
-<MudAlert Severity="Severity.Success">
-    Fred As'Tacos
-    <MudLink Href="https://www.dndbeyond.com/characters/134561288" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        <b>Dnd Beyond Sheet</b>
-    </MudLink>
-</MudAlert>
-
-<MudAlert Severity="Severity.Success">
-    Jizo
-    <MudLink Href="https://www.dndbeyond.com/characters/113360171" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        <b>Dnd Beyond Sheet</b>
-    </MudLink>
-</MudAlert>
-
-<MudAlert Severity="Severity.Success">
-    Kenya sugendees v2
-    <MudLink Href="https://www.dndbeyond.com/characters/134668024" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        <b>Dnd Beyond Sheet</b>
-    </MudLink>
-</MudAlert>
+<MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
+    @foreach (var character in characters)
+    {
+        <MudCarouselItem Transition="transition">
+            <MudCard Style="padding: 10px; margin: 5px;">
+                <MudCardContent>
+                    <MudImage Src="@character.Portrait" Alt="Character Portrait" Style="width: 100px; height: 100px;"></MudImage>
+                    <MudText Style="margin: 5px; font-size: 14px;">Name: @character.Name</MudText>
+                    <MudText Style="margin: 5px; font-size: 14px;">Level: @character.Level</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudCarouselItem>
+    })
+</MudCarousel>
+<MudSelect @bind-Value="transition" Label="Transition" Class="ma-2">
+    <MudSelectItem Value="@Transition.Fade">Fade</MudSelectItem>
+    <MudSelectItem Value="@Transition.Slide">Slide</MudSelectItem>
+    <MudSelectItem Value="@Transition.None">None</MudSelectItem>
+</MudSelect>
 
 
 
+
+
+
+
+<MudGrid Style="margin: 10px;">
+    <MudCard>
+        <MudCardContent>
+            <MudAlert Severity="Severity.Success">
+                MudBlazor templates
+                <MudLink Href="https://mudblazor.com" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
+                    <b>www.mudblazor.com</b>
+                </MudLink>
+            </MudAlert>
+
+            <MudAlert Severity="Severity.Success">
+                Efraim Malphael Ignatius Lucifron
+                <MudLink Href="https://www.dndbeyond.com/characters/133616351" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
+                    <b>Dnd Beyond Sheet </b>
+                </MudLink>
+            </MudAlert>
+
+            <MudAlert Severity="Severity.Success">
+                Fred As'Tacos
+                <MudLink Href="https://www.dndbeyond.com/characters/134561288" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
+                    <b>Dnd Beyond Sheet</b>
+                </MudLink>
+            </MudAlert>
+
+            <MudAlert Severity="Severity.Success">
+                Jizo
+                <MudLink Href="https://www.dndbeyond.com/characters/113360171" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
+                    <b>Dnd Beyond Sheet</b>
+                </MudLink>
+            </MudAlert>
+
+            <MudAlert Severity="Severity.Success">
+                Kenya sugendees v2
+                <MudLink Href="https://www.dndbeyond.com/characters/134668024" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
+                    <b>Dnd Beyond Sheet</b>
+                </MudLink>
+            </MudAlert>
+        </MudCardContent>
+    </MudCard>
+</MudGrid>
+
+
+
+
+@code
+{
+    private List<Character> characters = new();
+
+    private bool arrows = true;
+    private bool bullets = true;
+    private bool enableSwipeGesture = true;
+    private bool autocycle = true;
+    private Transition transition = Transition.Slide;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var allCharacters = await context.GetAllAsync();
+        characters.AddRange(allCharacters);
+    }
+
+}
 

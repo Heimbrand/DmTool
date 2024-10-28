@@ -3,51 +3,59 @@
 
 
 
-<div>
-    <MudAlert Severity="Severity.Success">
+<MudGrid Style="margin: 10px;">
+    <MudCard>
+        <MudCardContent>
+            <MudButton OnClick="RollD20" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D20</MudButton>
+            <MudButton OnClick="RollD12" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D12</MudButton>
+            <MudButton OnClick="RollD10" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D10</MudButton>
+            <MudButton OnClick="RollD8" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D8</MudButton>
+            <MudButton OnClick="RollD6" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D6</MudButton>
+            <MudButton OnClick="RollD4" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D4</MudButton>
+            <MudButton OnClick="RollD100" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D100</MudButton>
+            <MudButton OnClick="ClearResults" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">Clear results</MudButton>
+        </MudCardContent>
+    </MudCard>
+</MudGrid>
 
-        <MudButton OnClick="RollD20" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D20</MudButton>
-        <MudButton OnClick="RollD12" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D12</MudButton>
-        <MudButton OnClick="RollD10" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D10</MudButton>
-        <MudButton OnClick="RollD8" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D8</MudButton>
-        <MudButton OnClick="RollD6" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D6</MudButton>
-        <MudButton OnClick="RollD4" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D4</MudButton>
-        <MudButton OnClick="RollD100" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D100</MudButton>
-        <MudButton OnClick="ClearResults" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">Clear results</MudButton>
-
-    </MudAlert>
-</div>
 
 @if (rollResult.HasValue)
 {
+    <MudGrid Style="margin: 10px;" Justify="Justify.SpaceBetween">
+        <MudCard>
+            <MudCardContent>
+                <MudText>Current roll: @rollResult</MudText>
+            </MudCardContent>
+        </MudCard>
+        
+
+    </MudGrid>
+}
+<MudGrid Style="margin: 10px;">
     <MudCard>
         <MudCardContent>
-            <MudText>Current roll: @rollResult</MudText>
-        </MudCardContent>
-    </MudCard>
-}
-<MudCard>
-    <MudCardContent>
 
-        @if (results.Count > 0)
-        {
-            <MudText>Roll history</MudText>
-            @foreach (var result in results)
+            @if (results.Count > 0)
             {
-                <MudText>@result.Key</MudText>
-                @foreach (var roll in result.Value.AsEnumerable().Reverse())
+                <MudText>Roll history</MudText>
+                @foreach (var result in results)
                 {
-                    <MudText>Previous rolls: @roll</MudText>
+                    <MudText>@result.Key</MudText>
+                    @foreach (var roll in result.Value.AsEnumerable().Reverse())
+                    {
+                        <MudText>Previous rolls: @roll</MudText>
+                    }
                 }
             }
-        }
-        else
-        {
-            <MudText>Roll history is empty</MudText>
-        }
+            else
+            {
+                <MudText>Roll history is empty</MudText>
+            }
 
-    </MudCardContent>
-</MudCard>
+        </MudCardContent>
+    </MudCard>
+</MudGrid>
+
 
 
 
