@@ -4,6 +4,7 @@ using DmTool.Efc.Sql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DmTool.Efc.Sql.Migrations
 {
     [DbContext(typeof(DmDbContext))]
-    partial class DmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241031084538_updatedCharacterTable")]
+    partial class updatedCharacterTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,10 +62,6 @@ namespace DmTool.Efc.Sql.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Portrait")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Race")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")

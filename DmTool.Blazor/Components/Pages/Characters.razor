@@ -13,32 +13,38 @@
 @foreach (var character in AllChracters)
 {
     <MudGrid Justify="Justify.SpaceBetween">
-        <MudItem>
-            <MudCard Style="width: 450px; height: 450px; background-image: url('/Images/Parchment.png'); background-repeat: no-repeat; margin: 10px">
+        <MudItem Style="border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); width: 450px; height: 450px; margin: 10px">
+            <MudCard>
                 <MudCardContent>
                     <MudImage Src="@character.Portrait" Alt="Character Portrait" Height="200" Width="150" />
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Name: @character.Name</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Race: @character.Race</MudText>
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Level: @character.Level</MudText>
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Experience: @character.Experience</MudText>
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Notes: @character.Notes</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Alignment: @character.Alignment</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
-        <MudItem>
+        <MudItem Style="border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); margin: 15px;">
             <EditForm Model="@character" OnValidSubmit="() => OnValidEditSubmit(character)">
                 <DataAnnotationsValidator />
                 <MudGrid>
                     <MudItem xs="12" sm="7">
                         <MudCard>
                             <MudCardContent>
-                                <MudTextField Label="Name"
+                                <MudTextField Label="Name" 
                                               @bind-Value="character.Name" For="@(() => character.Name)" />
+                                <MudTextField Label="Race" Class="mt-3"
+                                              @bind-Value="character.Race" For="@(() => character.Race)" />
                                 <MudTextField Label="Level" Class="mt-3"
                                               @bind-Value="character.Level" For="@(() => character.Level)" />
                                 <MudTextField Label="Experience" Class="mt-3"
                                               @bind-Value="character.Experience" For="@(() => character.Experience)" />
                                 <MudTextField Label="Notes" Class="mt-3"
                                               @bind-Value="character.Notes" For="@(() => character.Notes)" />
+                                <MudTextField Label="Alignment" Class="mt-3"
+                                              @bind-Value="character.Alignment" For="@(() => character.Alignment)" />
                                
                             </MudCardContent>
                             <MudCardActions>
@@ -70,7 +76,7 @@
             </EditForm>
         </MudItem>
         <MudItem>
-            <MudCard Style="width: 500px; height: 450px; background-image: url('/Images/Parchment.png'); background-repeat: no-repeat; margin: 10px">
+            <MudCard Style="width: 500px; height: 450px; background-image: url('/Images/Parchment.png'); background-repeat: no-repeat; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); margin: 15px; ">
                 <MudCardContent>
                     @if (character.Items is null || !character.Items.Any())
                     {
@@ -88,7 +94,7 @@
         </MudItem>
     </MudGrid>
 }
-<MudItem>
+<MudItem Style="border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); margin: 15px;">
     <EditForm Model="@character" OnValidSubmit="() => OnValidAddSubmit(character)">
         <DataAnnotationsValidator />
         <MudGrid>

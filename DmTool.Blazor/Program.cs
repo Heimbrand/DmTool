@@ -40,6 +40,7 @@ builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirme
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<CharacterRepository>();
 builder.Services.AddScoped<ItemRepository>();
+builder.Services.AddScoped<DateTrackerRepository>();
 builder.Services.AddSingleton<IEmailSender<User>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();
@@ -66,5 +67,9 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
+
+
+
 
 app.Run();

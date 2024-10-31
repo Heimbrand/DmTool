@@ -4,7 +4,7 @@
 
 
 <MudGrid Style="margin: 10px;">
-    <MudCard>
+    <MudCard Style="padding: 10px; margin: 5px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
         <MudCardContent>
             <MudButton OnClick="RollD20" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D20</MudButton>
             <MudButton OnClick="RollD12" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">D12</MudButton>
@@ -22,7 +22,7 @@
 @if (rollResult.HasValue)
 {
     <MudGrid Style="margin: 10px;" Justify="Justify.SpaceBetween">
-        <MudCard>
+        <MudCard Style="padding: 10px; margin: 5px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
             <MudCardContent>
                 <MudText>Current roll: @rollResult</MudText>
             </MudCardContent>
@@ -32,7 +32,7 @@
     </MudGrid>
 }
 <MudGrid Style="margin: 10px;">
-    <MudCard>
+    <MudCard Style="padding: 10px; margin: 5px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
         <MudCardContent>
 
             @if (results.Count > 0)

@@ -2,21 +2,35 @@
 @using DmTool.Efc.Sql.Entities
 @using DmTool.Efc.Sql.Repositories
 @inject CharacterRepository context
+@inject DateTrackerRepository dateTrackerContext
+
 
 <PageTitle>Home</PageTitle>
 
 
-<MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
+<MudCarousel Class="mud-width-full" Style="height:300px; margin:10px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
     @foreach (var character in characters)
     {
         <MudCarouselItem Transition="transition">
-            <MudCard Style="padding: 10px; margin: 5px;">
-                <MudCardContent>
-                    <MudImage Src="@character.Portrait" Alt="Character Portrait" Style="width: 100px; height: 100px;"></MudImage>
-                    <MudText Style="margin: 5px; font-size: 14px;">Name: @character.Name</MudText>
-                    <MudText Style="margin: 5px; font-size: 14px;">Level: @character.Level</MudText>
-                </MudCardContent>
-            </MudCard>
+            <MudGrid>
+                <MudCard Style="padding: 10px; margin: 5px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+                    <MudCardContent>
+                        <MudImage Src="@character.Portrait" Alt="Character Portrait" Style="width: 250px; height: 200px;"></MudImage>
+                    </MudCardContent>
+                </MudCard>
+                <MudCard Style="padding: 10px; margin: 5px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+                    <MudCardContent>
+                        <MudText Style="margin: 5px; font-size: 14px;">Name: @character.Name</MudText>
+                        <MudText Style="margin: 5px; font-size: 14px;">Name: @character.Race</MudText>
+                        <MudText Style="margin: 5px; font-size: 14px;">Alignment: @character.Alignment</MudText>
+                        <MudText Style="margin: 5px; font-size: 14px;">Level: @character.Level</MudText>
+                        <MudText Style="margin: 5px; font-size: 14px;">Experience: @character.Experience</MudText>
+                        <MudText Style="margin: 5px; font-size: 14px;">Notes: @character.Notes</MudText>
+                    </MudCardContent>
+                </MudCard>
+
+            </MudGrid>
+
         </MudCarouselItem>
     })
 </MudCarousel>
@@ -33,7 +47,7 @@
 
 
 <MudGrid Style="margin: 10px;">
-    <MudCard>
+    <MudCard Style="margin: 10px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
         <MudCardContent>
             <MudAlert Severity="Severity.Success">
                 MudBlazor templates
@@ -71,6 +85,25 @@
             </MudAlert>
         </MudCardContent>
     </MudCard>
+
+    <MudCard Style="margin: 10px;border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+        <MudPaper Style="margin: 10px;">
+            @foreach (var dateTracker in _currentDateTracker)
+            {
+                <MudText>Adventure: @dateTracker.Name</MudText>
+                <MudText>Day: @dateTracker.Day</MudText>
+                <MudButton Variant="Variant.Text" Color="Color.Error" Size="Size.Small" OnClick="() => IncreaseDay(dateTracker)">+</MudButton>
+                <MudButton Variant="Variant.Text" Color="Color.Error" Size="Size.Small" OnClick="() => DecreaseDay(dateTracker)">-</MudButton>
+                <MudText>Month: @dateTracker.Month</MudText>
+                <MudButton Variant="Variant.Text" Color="Color.Error" Size="Size.Small" OnClick="() => IncreaseMonth(dateTracker)">+</MudButton>
+                <MudButton Variant="Variant.Text" Color="Color.Error" Size="Size.Small" OnClick="() => DecreaseMonth(dateTracker)">-</MudButton>
+                <MudText>Year: @dateTracker.Year</MudText>
+            }
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large" OnClick="SaveChanges"></MudButton>
+        </MudPaper>
+
+
+    </MudCard>
 </MudGrid>
 
 
@@ -79,7 +112,7 @@
 @code
 {
     private List<Character> characters = new();
-
+    private List<DateTracker> _currentDateTracker = new();
     private bool arrows = true;
     private bool bullets = true;
     private bool enableSwipeGesture = true;
@@ -91,6 +124,38 @@
     {
         var allCharacters = await context.GetAllAsync();
         characters.AddRange(allCharacters);
+
+        var belFinkoDateTracker = await dateTrackerContext.GetByIdAsync(1);
+        _currentDateTracker.Add(belFinkoDateTracker);
+    }
+
+    private void IncreaseDay(DateTracker dateTracker)
+    {
+        dateTracker.Day += 1;
+    }
+
+    private void IncreaseMonth(DateTracker dateTracker)
+    {
+        dateTracker.Month += 1;
+    }
+
+    private void DecreaseDay(DateTracker dateTracker)
+    {
+        dateTracker.Day -= 1;
+    }
+
+    private void DecreaseMonth(DateTracker dateTracker)
+    {
+        dateTracker.Month -= 1;
+    }
+
+    private async Task SaveChanges()
+    {
+        foreach (var dateTracker in _currentDateTracker)
+        {
+            await dateTrackerContext.UpdateAsync(dateTracker);
+        }
+
     }
 
 }

@@ -14,4 +14,5 @@ public class DmDbContext : IdentityDbContext<User>
     public DbSet<Character> Characters { get; set; }
     public DbSet<Item> Items { get; set; }
     public override DbSet<User> Users { get; set; }
+    public DbSet<DateTracker> DateTrackers { get; set; }
 }
