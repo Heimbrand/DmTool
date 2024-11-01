@@ -6,39 +6,212 @@
 @inherits Microsoft.AspNetCore.Components.LayoutComponentBase
 
 
-<MudThemingProvider IsDarkMode="true"/>
+<MudThemingProvider IsDarkMode="true" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-@* Style="background-image: url('/Images/Parchment.png');" *@
+
 
 <MudLayout>
-    
-    <MudAppBar Elevation="1" Style="background-color: darkred">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+    <MudAppBar Elevation="1" Style="background-color: black">
+        <MudIconButton Icon="@Icons.Material.Filled.Games" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => LeftDrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">DmTool</MudText>
-        <MudSpacer/>
-       
+
+        <MudToolBar>
+            <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+            <MudNavLink Href="characters" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">Characters</MudNavLink>
+            <MudNavLink Href="items" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Backpack">Items</MudNavLink>
+
+
+            <AuthorizeView>
+                <Authorized>
+                    <MudNavLink Href="Account/Manage" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Mail">@context.User.Identity?.Name</MudNavLink>
+                </Authorized>
+                <NotAuthorized>
+                    <MudNavLink Href="Account/Register" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Register</MudNavLink>
+                    <MudNavLink Href="Account/Login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Login</MudNavLink>
+                </NotAuthorized>
+            </AuthorizeView>
+        </MudToolBar>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.List" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => RightDrawerToggle())" />
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu/>
+
+    <MudDrawer @bind-Open="_leftDrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <div style="padding: 16px;">
+        <MudGrid>
+            <MudCard Style="padding: 10px; margin: 5px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+                <MudCardContent>
+                    <MudButton OnClick="RollD20" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Size="Size.Small" Color="Color.Dark" Style="margin:10px;">D20</MudButton>
+                    <MudButton OnClick="RollD12" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Size="Size.Small" Color="Color.Dark" Style="margin:10px;">D12</MudButton>
+                    <MudButton OnClick="RollD10" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Size="Size.Small" Color="Color.Dark" Style="margin:10px;">D10</MudButton>
+                    <MudButton OnClick="RollD8" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Size="Size.Small" Color="Color.Dark" Style="margin:10px;">D8</MudButton>
+                    <MudButton OnClick="RollD6" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Size="Size.Small" Color="Color.Dark" Style="margin:10px;">D6</MudButton>
+                    <MudButton OnClick="RollD4" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Size="Size.Small" Color="Color.Dark" Style="margin:10px;">D4</MudButton>
+                    <MudButton OnClick="RollD100" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Size="Size.Small" Color="Color.Dark" Style="margin:10px;">D100</MudButton>
+                    <MudButton OnClick="ClearResults" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Size="Size.Small" Color="Color.Dark" Style="margin:10px;">Clear results</MudButton>
+                </MudCardContent>
+            </MudCard>
+        </MudGrid>
+
+
+        @if (rollResult.HasValue)
+        {
+            <MudGrid Style="margin: 10px;" Justify="Justify.SpaceBetween">
+                <MudCard Style="padding: 10px; margin: 5px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+                    <MudCardContent>
+                        <MudText>Current roll: @rollResult</MudText>
+                    </MudCardContent>
+                </MudCard>
+
+
+            </MudGrid>
+        }
+        <MudGrid Style="margin: 10px;">
+            <MudCard Style="padding: 10px; margin: 5px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+                <MudCardContent>
+
+                    @if (results.Count > 0)
+                    {
+                        <MudText>Roll history</MudText>
+                        @foreach (var result in results)
+                        {
+                            <MudText>@result.Key</MudText>
+                            @foreach (var roll in result.Value.AsEnumerable().Reverse())
+                            {
+                                <MudText>Previous rolls: @roll</MudText>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <MudText>Roll history is empty</MudText>
+                    }
+
+                </MudCardContent>
+            </MudCard>
+        </MudGrid>
+        </div>
+    </MudDrawer>
+    <MudDrawer @bind-Open="_rightDrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Anchor="Anchor.End">
+        <MudText>Placeholder</MudText>
     </MudDrawer>
     <MudMainContent Class="mt-16 pa-4">
         @Body
     </MudMainContent>
-
+    <MudFooter>
+        <MudText Typo="Typo.body2" Align="Align.Center">
+            &copy; @(DateTime.Now.Year) DmTool. All rights reserved.
+        </MudText>
+        <MudText Typo="Typo.body2" Align="Align.Center">
+            <MudLink Href="https://github.com/Heimbrand" Target="_blank" Typo="Typo.body2" Color="Color.Default">GitHub</MudLink>
+            <MudLink Href="https://www.linkedin.com/in/olle-heimbrand/" Target="_blank" Typo="Typo.body2" Color="Color.Default">Linkedin</MudLink>
+        </MudText>
+    </MudFooter>
 </MudLayout>
 
 @code {
-    private bool _drawerOpen = true;
+    private bool _leftDrawerOpen = true;
+    private bool _rightDrawerOpen = true;
 
-    private void DrawerToggle()
+    private void RightDrawerToggle()
     {
-        _drawerOpen = !_drawerOpen;
+        _rightDrawerOpen = !_rightDrawerOpen;
     }
 
+    private void LeftDrawerToggle()
+    {
+        _leftDrawerOpen = !_leftDrawerOpen;
+    }
 
-    
-  
+    #region Dice Logic
+
+    private int? rollResult;
+    private Dictionary<string, List<int>> results = new();
+
+    private void RollD20() => rollResult = D20Roll();
+    private void RollD12() => rollResult = D12Roll();
+    private void RollD10() => rollResult = D10Roll();
+    private void RollD8() => rollResult = D8Roll();
+    private void RollD6() => rollResult = D6Roll();
+    private void RollD4() => rollResult = D4Roll();
+    private void RollD100() => rollResult = D100Roll();
+    private void ClearResults() => rollResult = ClearResult();
+
+    private int D20Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 21);
+        string key = "D20";
+        AddRollToResults(key, roll);
+
+        return roll;
+    }
+    private int D12Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 13);
+        string key = "D12";
+        AddRollToResults(key, roll);
+        return roll;
+    }
+    private int D10Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 11);
+        string key = "D10";
+        AddRollToResults(key, roll);
+        return roll;
+    }
+    private int D8Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 9);
+        string key = "D8";
+        AddRollToResults(key, roll);
+        return roll;
+    }
+    private int D6Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 7);
+        string key = "D6";
+        AddRollToResults(key, roll);
+        return roll;
+    }
+    private int D4Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 5);
+        string key = "D4";
+        AddRollToResults(key, roll);
+        return roll;
+    }
+    private int D100Roll()
+    {
+        Random rnd = new Random();
+        int roll = rnd.Next(1, 101);
+        string key = "D100";
+        AddRollToResults(key, roll);
+        return roll;
+    }
+    private int ClearResult()
+    {
+        results.Clear();
+        return 0;
+    }
+
+    private void AddRollToResults(string key, int roll)
+    {
+        if (!results.ContainsKey(key))
+        {
+            results[key] = new List<int>();
+        }
+        results[key].Add(roll);
+    }
+
+    #endregion
+
+
 }
