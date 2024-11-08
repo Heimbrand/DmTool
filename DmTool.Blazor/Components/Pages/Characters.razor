@@ -35,6 +35,8 @@
                             <MudCardContent>
                                 <MudTextField Label="Name" 
                                               @bind-Value="character.Name" For="@(() => character.Name)" />
+                                <MudTextField Label="Ac"
+                                              @bind-Value="character.ArmorClass" For="@(() => character.ArmorClass)" />
                                 <MudTextField Label="Race" Class="mt-3"
                                               @bind-Value="character.Race" For="@(() => character.Race)" />
                                 <MudTextField Label="Level" Class="mt-3"
