@@ -2,6 +2,7 @@
 @inject CharacterRepository context
 
 @using DmTool.Efc.Sql
+@using DmTool.Efc.Sql.Dtos
 @using DmTool.Efc.Sql.Entities
 @using DmTool.Efc.Sql.Repositories
 @using Microsoft.EntityFrameworkCore
@@ -13,14 +14,18 @@
 @foreach (var character in AllChracters)
 {
     <MudGrid Justify="Justify.SpaceBetween">
-        <MudItem Style="border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); width: 450px; height: 450px; margin: 10px">
+        <MudItem Style="border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); width: 450px; height: 600px; margin: 10px">
             <MudCard>
                 <MudCardContent>
                     <MudImage Src="@character.Portrait" Alt="Character Portrait" Height="200" Width="150" />
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Name: @character.Name</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Hit Points: @character.HitPoints / @character.HitPointMax</MudText>
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Race: @character.Race</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Ac: @character.ArmorClass</MudText>
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Level: @character.Level</MudText>
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Experience: @character.Experience</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Speed: @character.Speed</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-3 black-text">Dark Vision: @character.DarkVision</MudText>
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Notes: @character.Notes</MudText>
                     <MudText Typo="Typo.h5" Class="ml-3 black-text">Alignment: @character.Alignment</MudText>
                 </MudCardContent>
@@ -33,8 +38,12 @@
                     <MudItem xs="12" sm="7">
                         <MudCard>
                             <MudCardContent>
-                                <MudTextField Label="Name" 
+                                <MudTextField Label="Name"
                                               @bind-Value="character.Name" For="@(() => character.Name)" />
+                                <MudTextField Label="Hit Points"
+                                              @bind-Value="character.HitPoints" For="@(() => character.HitPoints)" />
+                                <MudTextField Label="Hit Points Max"
+                                              @bind-Value="character.HitPointMax" For="@(() => character.HitPointMax)" />
                                 <MudTextField Label="Ac"
                                               @bind-Value="character.ArmorClass" For="@(() => character.ArmorClass)" />
                                 <MudTextField Label="Race" Class="mt-3"
@@ -43,12 +52,17 @@
                                               @bind-Value="character.Level" For="@(() => character.Level)" />
                                 <MudTextField Label="Experience" Class="mt-3"
                                               @bind-Value="character.Experience" For="@(() => character.Experience)" />
+                                <MudTextField Label="Speed" Class="mt-3"
+                                              @bind-Value="character.Speed" For="@(() => character.Speed)" />
+                                <MudTextField Label="Dark Vision" Class="mt-3"
+                                              @bind-Value="character.DarkVision" For="@(() => character.DarkVision)" />
                                 <MudTextField Label="Notes" Class="mt-3"
                                               @bind-Value="character.Notes" For="@(() => character.Notes)" />
                                 <MudTextField Label="Alignment" Class="mt-3"
                                               @bind-Value="character.Alignment" For="@(() => character.Alignment)" />
-                               
+
                             </MudCardContent>
+
                             <MudCardActions>
                                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Edit</MudButton>
                             </MudCardActions>
@@ -89,7 +103,7 @@
                         foreach (var item in character.Items)
                         {
                             <MudText Typo="Typo.h5" Class="ml-3 black-text">Name: @character.Items</MudText>
-                        }   
+                        }
                     }
                 </MudCardContent>
             </MudCard>
@@ -97,7 +111,7 @@
     </MudGrid>
 }
 <MudItem Style="border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); margin: 15px;">
-    <EditForm Model="@character" OnValidSubmit="() => OnValidAddSubmit(character)">
+    <EditForm Model="@newCharacter" OnValidSubmit="() => OnValidAddSubmit(newCharacter)">
         <DataAnnotationsValidator />
         <MudGrid>
             <MudItem xs="12" sm="7">
@@ -147,27 +161,90 @@
 @code
 {
     bool success;
-    private List<Character> AllChracters = new();
-    Character character = new Character();
+    private List<CharacterDto> AllChracters = new();
+    CharacterDto character = new();
+    Character newCharacter = new();
 
-    private async Task OnValidEditSubmit(Character character)
+
+    private async Task OnValidEditSubmit(CharacterDto character)
     {
         success = true;
-        character.Modified = DateTime.UtcNow;
-        await context.UpdateAsync(character);
+
+        var characterToEdit = new Character
+            {
+                Id = character.Id,
+                Name = character.Name,
+                Created = character.Created,
+                Modified = DateTime.UtcNow,
+                Notes = character.Notes,
+                Portrait = character.Portrait,
+                Race = character.Race,
+                Level = character.Level,
+                Experience = character.Experience,
+                HitPoints = character.HitPoints,
+                HitPointMax = character.HitPointMax,
+                Size = character.Size,
+                Speed = character.Speed,
+                DarkVision = character.DarkVision,
+                Alignment = character.Alignment,
+                ArmorClass = character.ArmorClass,
+                AlignmentDescription = character.AlignmentDescription,
+                CharacterDescription = character.CharacterDescription,
+                Languages = character.Languages,
+                UserId = character.UserId,
+                Items = character.Items
+            };
+
+        await context.UpdateAsync(characterToEdit);
         StateHasChanged();
-
     }
-    private async Task OnValidAddSubmit(Character character)
+    private async Task OnValidAddSubmit(Character entityCharacter)
     {
         success = true;
-        character.Created = DateTime.UtcNow;
-        await context.AddAsync(character);
+        var characterEntity = new Character
+        {
+            Name = newCharacter.Name,
+            Created = DateTime.UtcNow,
+            Modified = DateTime.UtcNow,
+            Notes = newCharacter.Notes,
+            Portrait = newCharacter.Portrait,
+        };
+
+        await context.AddAsync(characterEntity);
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
     {
         var allCharacters = await context.GetAllAsync();
-        AllChracters.AddRange(allCharacters);
+
+        foreach (var character in allCharacters)
+        {
+            var characterDto = new CharacterDto
+                {
+                    Id = character.Id,
+                    Name = character.Name,
+                    Created = character.Created,
+                    Modified = character.Modified,
+                    Notes = character.Notes,
+                    Portrait = character.Portrait,
+                    Race = character.Race,
+                    Level = character.Level,
+                    Experience = character.Experience,
+                    HitPoints = character.HitPoints,
+                    HitPointMax = character.HitPointMax,
+                    Size = character.Size,
+                    Speed = character.Speed,
+                    DarkVision = character.DarkVision,
+                    Alignment = character.Alignment,
+                    ArmorClass = character.ArmorClass,
+                    AlignmentDescription = character.AlignmentDescription,
+                    CharacterDescription = character.CharacterDescription,
+                    Languages = character.Languages,
+                    UserId = character.UserId,
+                    Items = (List<Item>?)character.Items
+                };
+            AllChracters.Add(characterDto);
+        }
+        StateHasChanged();
     }
 }

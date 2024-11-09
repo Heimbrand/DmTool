@@ -7,4 +7,5 @@ namespace DmTool.Efc.Sql.IRepositories;
 public interface ICharacterRepository : IRepository<Character, int>
 {
     Task <IEnumerable<Character>> GetAllByLevelAsync(int level);
+    
 }
